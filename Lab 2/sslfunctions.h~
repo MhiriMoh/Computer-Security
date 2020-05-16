@@ -1,0 +1,24 @@
+#ifndef sslfunctions_h
+#define sslfunctions_h
+
+#include <unistd.h>
+#include <string.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netdb.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <fcntl.h>
+#include <openssl/ssl.h>
+#include <openssl/err.h>
+#include <signal.h>
+
+
+SSL_CTX *initialize_ctx(char *keyfile, char *password);
+
+#endif
+
+
+

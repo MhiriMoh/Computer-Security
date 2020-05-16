@@ -1,0 +1,18 @@
+
+#Mohammed M'Hiri, 1002455041, m.mhiri@mail.utoronto.ca
+#Alexander Jaskot, 1002290166, alexander.jaskot@mail.utoronto.ca
+
+
+Target 1: Buffer overflow vulnerability, buf is pushed on the stack above the return address but has no restrictions on the amount that it can be filled in the strcpy (should've used strncpy) and so our exploit passes a string larger than buf that overwrites the return address of lab_main with the address of buf (declared in lab_main) which contains shellcode.
+
+Target 2: Buffer overflow vulnerability, args is being copied into buf using "i" and "len" to restrict amount copied, however, "len" and "i" are both on the stack just underneath and within buf and so can be overwritten to modify restriction. we overwrite least significant byte of "i" so that we can jump the rest of the number without changing any other bytes (i just increases by 4). Begin overwriting len to overwrite the return address, we will need to fill the rest of the bytes of 0x0000011C using environment variables we need to include NULLS.
+
+Target 3: Buffer overflow vulnerability, buf is defined in foo and passed by reference into bar, copy restriction is set up in bar however foo's return address is well within reach of the maximum amount i.e. ltarg (88). Our exploit simply acts as a simple buffer overflow that overwrites foo's return address with the address of buf which contains shellcode.
+
+Target 4: Buffer overflow vulnerability, similar to part 2 however len is stored above i on the stack and so we overwrite "len" before "i"; our solution for this was to overwrite both "len" and "i" completely such that there is a remaining difference enoough to overwrite the return address of foo. this allowed us to avoid using env variables. "i" is only used as an index to count not as a referencing index (ptr arithmetic instead) this doesn't affect the memory copy.
+
+Target 5: Format string vulnerability, we need to use the snprintf and %hhn to overwrite the return address of foo. We do this by advancing snprintf's current argument pointer enough that it reads from local var "formatString" which contains the return address of foo. it reads this and places into memory the amount of bytes that have been printed so far, we use %x and math to ensure that each byte of the return address is overwritten correctly with the return address of buf which contains shellcode.
+
+Target 6: Double free vulnerability, we need to use the fact that "q" is being freed twice. We fill our exploit with shellcode and fake tags that will overwrite the return address of foo with the address of our shellcode. this works because tfree will try to consolidate the memory being freed and since we use the tags to point to where we want them to. we set "q_prev" to point at buf and "q_next" to point at ret_addr of foo, we use  second fake tag at the beginning of our exploit so that q_next->prev = q_prev.
+
+

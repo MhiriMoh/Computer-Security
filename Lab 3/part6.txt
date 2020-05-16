@@ -1,0 +1,3 @@
+' or last_name != '
+
+Full SQL statement: SELECT * FROM user_data WHERE last_name = '' or last_name != ''

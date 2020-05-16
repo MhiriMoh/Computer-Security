@@ -1,0 +1,20 @@
+#Jaskot Alexander, 1002290166, alexander.jaskot@mail.utoronto.ca
+#M'Hiri Mohammed, 1002455041, m.mhiri@mail.utoronto.ca
+
+
+Part 1 Explanation:
+Run dig ecf.utoronto.ca to get the IPv4 address and the name servers (under Additional Info). dig ecf.utoronto.ca MX gives us the mail server.
+
+Regardless if we route through the BIND server or through the default DNS server the information is identical.
+
+
+Part 2 Explanation:
+We modified the starter code to create a socket and bind it to our proxy's port. We then receive data from dig on this port and forward the data to the BIND server. We then receive from the BIND server and forward it back to dig.
+
+
+Part 3 Explanation:
+Carrying on from Part 2, if the spoof_response flag is set, then rather than directly forwarding the BIND response back to dig, we modify the response. We do this by modifying the IPv4 address found in "an.rdata", and its name servers found in "ns.rdata". Lastly we clear the additional section by setting the "ar" field to None (blank array).
+
+
+Part 4 Explanation:
+This time around we establish a connection directly to the BIND server and send a DNS request for example.com. This first response is stored in the cache and allows us to later overwrite the name servers of example.com. We modify the response such that it looks identical to the original response but we change the key fields around the fake sub-domain. Specifically we modify the main "question record name" (the site being looked up), the "resource record name" (again the site being looked up), the ip address of the subdomain, and the name servers of example.com. In order to overwrite the cached information we must set the response's "Authoritative Answer" to 1, otherwise the response does not have the authority to overwrite the cached data. In order to begin the DNS poisoning we send a new DNS packet with the fake sub-domain to the BIND server. We then flood the query port of the BIND server with the modified "response" we created earlier by randomizing the transaction id and sending 100 responses for ecery fake sub-domain. If the correct transaction id is not used the real response arrives at the BIND server and we repeat the process with a new fake sub-domain. We check that the poisoning has occurred by sending a new DNS request for example.com to the BIND server and check that the name servers have been changed to the fake name servers we sent in our fake response packet. If this is the case then we exit from our attempts and stop flooding the BIND server.

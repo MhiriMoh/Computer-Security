@@ -1,0 +1,8 @@
+#Mohammed M'Hiri, 1002455041, m.mhiri@mail.utoronto.ca
+#Alexander Jaskot, 1002290166, alexander.jaskot@mail.utoronto.ca
+
+Client: Initialize the tcp connection between the client and the server. Then we initialize and initiate the actual ssl handshale between the client and the server. We ensure that the client is using the correct ssl configs and define the underlying context with the client info. We then check to make sure that the client is communicating with the correct server by checking the server's certificate. The server certificate has to have the correct common name, email, and issuer. If everything is valid, we then send our information (the question) to the server, and then wait for a response. We receive the response and print it. If at any time during the read or write an error is returned, we check the error and print out the corresponding error message and shut down the connection.
+
+Server: Initialize the tcp connection, context and ssl structure similar to above (slightly different settings). Wait for client to initiate SSL handshake. When a client connects, fork a child process to handle the ssl handshake and exchange of information. This child creates a new ssl structure with the context and exchanges the information. Read and write the data from and to the client while checking to ensure that no errors are returned. Once done we return from the child process and close its socket.
+
+SSLFUNCTIONS.c: Contains the code for initialize_ctx which sets up and defines the context settings with the keyfile (private certificate) and password specified.

